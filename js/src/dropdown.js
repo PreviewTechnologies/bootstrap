@@ -438,6 +438,6 @@ const Dropdown = (() => {
 
   return Dropdown
 
-})(jQuery, Popper)
+})($, Popper)
 
 export default Dropdown
