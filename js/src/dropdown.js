@@ -83,7 +83,7 @@ const Dropdown = (() => {
   }
 
   const DefaultType = {
-    offset      : '(number|string)',
+    offset      : '(number|string|function)',
     flip        : 'boolean'
   }
 
@@ -251,12 +251,19 @@ const Dropdown = (() => {
     }
 
     _getPopperConfig() {
+      const offsetConf = {}
+      if (typeof this._config.offset === 'function') {
+        offsetConf.fn = (data) => {
+          data.offsets = $.extend({}, data.offsets, this._config.offset(data.offsets) || {})
+          return data
+        }
+      } else {
+        offsetConf.offset = this._config.offset
+      }
       const popperConfig = {
         placement : this._getPlacement(),
         modifiers : {
-          offset : {
-            offset : this._config.offset
-          },
+          offset : offsetConf,
           flip : {
             enabled : this._config.flip
           }
